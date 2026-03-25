@@ -1,9 +1,9 @@
-.PHONY: clean critic security lint test build run
+.PHONY: critic security lint test build run
 
 APP_NAME = apiserver
 BUILD_DIR = $(PWD)/build
-MIGRATIONS_FOLDER = $(PWD)/platform/migrations
-DATABASE_URL = postgres://postgres:password@cgapp-postgres/postgres?sslmode=disable
+MIGRATIONS_FOLDER = ./platform/migrations
+DATABASE_URL = postgres://postgres:password@localhost/postgres?sslmode=disable
 
 clean:
 	rm -rf ./build
@@ -61,7 +61,7 @@ docker.postgres:
 		-e POSTGRES_DB=postgres \
 		-v ${HOME}/dev-postgres/data/:/var/lib/postgresql/data \
 		-p 5432:5432 \
-		postgres
+		postgres:16
 
 docker.redis:
 	docker run --rm -d \

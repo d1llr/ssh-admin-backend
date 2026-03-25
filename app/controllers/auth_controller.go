@@ -32,8 +32,8 @@ func UserSignUp(c *fiber.Ctx) error {
 	if err := c.BodyParser(signUp); err != nil {
 		// Return status 400 and error message.
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": true,
-			"msg":   err.Error(),
+			"errorqwd": true,
+			"msg":      err.Error(),
 		})
 	}
 
