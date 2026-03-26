@@ -37,10 +37,8 @@ func CreateSSHConnection(c *fiber.Ctx) error {
 		)
 	}
 
-	// Create database connection.
 	db, err := database.OpenDBConnection()
 	if err != nil {
-		// Return status 500 and database connection error.
 		return utils.NewResponse(
 			c,
 			fiber.StatusInternalServerError,
@@ -49,29 +47,36 @@ func CreateSSHConnection(c *fiber.Ctx) error {
 		)
 	}
 
-	// Create a new validator for a Book model.
 	validate := utils.NewValidator()
 
-	// Set initialized default data for book:
 	ssh.ID = uuid.New()
 	ssh.CreatedAt = time.Now()
 	ssh.UserID = claims.UserID
 
-	// Validate book fields.
 	if err := validate.Struct(ssh); err != nil {
-		// Return, if some fields are not valid.
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": true,
-			"msg":   utils.ValidatorErrors(err),
-		})
+		return utils.NewResponse(
+			c,
+			fiber.StatusBadRequest,
+			true,
+			err.Error(),
+		)
+	}
+	if err := db.CreateSSHConnection(ssh); err != nil {
+		return utils.NewResponse(
+			c,
+			fiber.StatusInternalServerError,
+			true,
+			err.Error(),
+		)
 	}
 
-	// Create book by given model.
-	if err := db.create(ssh); err != nil {
-		// Return status 500 and error message.
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": true,
-			"msg":   err.Error(),
-		})
-	}
+	return utils.NewResponse(
+		c,
+		fiber.StatusCreated,
+		false,
+		"Connection created successfully",
+		fiber.Map{
+			"ssh": ssh,
+		},
+	)
 }

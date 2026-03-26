@@ -1,13 +1,8 @@
 package controllers
 
 import (
-	"time"
-
-	"github.com/create-go-app/fiber-go-template/app/models"
-	"github.com/create-go-app/fiber-go-template/pkg/utils"
-	"github.com/create-go-app/fiber-go-template/platform/database"
+	"github.com/create-go-app/fiber-go-template/app/services"
 	"github.com/gofiber/fiber/v2"
-	"github.com/google/uuid"
 )
 
 // CreateSSH method to create new SSH connection
@@ -22,11 +17,5 @@ import (
 // @Success 200 {object} models.SSH
 // @Router /v1/user/sign/up [post]
 func CreateSSH(c *fiber.Ctx) error {
-
-	// Return status 200 OK.
-	return c.JSON(fiber.Map{
-		"error": false,
-		"msg":   nil,
-		"book":  book,
-	})
+	return services.CreateSSHConnection(c)
 }
