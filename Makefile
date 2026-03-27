@@ -24,7 +24,7 @@ test: clean critic security lint
 build: test
 	CGO_ENABLED=0 go build -ldflags="-w -s" -o $(BUILD_DIR)/$(APP_NAME) main.go
 
-run: swag build
+swag.run: swag build
 	$(BUILD_DIR)/$(APP_NAME)
 
 migrate.up:

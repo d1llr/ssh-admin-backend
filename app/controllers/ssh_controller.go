@@ -5,17 +5,22 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-// CreateSSH method to create new SSH connection
-// @Description Create new ssh connection.
-// @Summary creating new ssh connection
+// CreateSSH func for creates a new ssh connection.
+// @Description Create a new ssh connection.
+// @Summary create a new ssh connection
 // @Tags SSH
 // @Accept json
 // @Produce json
-// @Param name body string true "Name"
-// @Param host body string true "Host"
-// @Param password body string true "Password"
+// @Param Name body string true "Name"
+// @Param Host body string true "Host"
+// @Param Password body string true "Password"
 // @Success 200 {object} models.SSH
-// @Router /v1/user/sign/up [post]
+// @Security ApiKeyAuth
+// @Router /v1/ssh/create [post]
 func CreateSSH(c *fiber.Ctx) error {
 	return services.CreateSSHConnection(c)
+}
+
+func GetAllSSHConnections(c *fiber.Ctx) error {
+	return services.GetAllSSHConnectionsByUserID(c)
 }

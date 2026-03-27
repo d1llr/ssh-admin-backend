@@ -80,3 +80,52 @@ func CreateSSHConnection(c *fiber.Ctx) error {
 		},
 	)
 }
+
+func GetAllSSHConnectionsByUserID(c *fiber.Ctx) error {
+
+	claims, err := utils.ExtractTokenMetadata(c)
+	if err != nil {
+		return utils.NewResponse(
+			c,
+			fiber.StatusInternalServerError,
+			true,
+			err.Error(),
+		)
+	}
+
+	if expErr := utils.Check_exp(c, *claims); expErr != nil {
+		return expErr
+	}
+
+	db, err := database.OpenDBConnection()
+	if err != nil {
+		return utils.NewResponse(
+			c,
+			fiber.StatusInternalServerError,
+			true,
+			err.Error(),
+		)
+	}
+	userId := claims.UserID
+	foundedSSHConnections, err := db.GetAllSSHConnectionsByUserId(userId)
+
+	if err != nil {
+		// Return status 404 and book not found error.
+		return utils.NewResponse(
+			c,
+			fiber.StatusBadRequest,
+			true,
+			err.Error(),
+		)
+	}
+
+	return utils.NewResponse(
+		c,
+		fiber.StatusOK,
+		false,
+		"List of connections",
+		fiber.Map{
+			"data": foundedSSHConnections,
+		},
+	)
+}

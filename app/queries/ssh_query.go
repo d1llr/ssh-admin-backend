@@ -2,6 +2,7 @@ package queries
 
 import (
 	"github.com/create-go-app/fiber-go-template/app/models"
+	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -9,35 +10,34 @@ type SSHQueries struct {
 	*sqlx.DB
 }
 
-func (q *BookQueries) GetAllSSHConnections() ([]models.SSH, error) {
-	// Define books variable.
+func (q *SSHQueries) GetAllSSHConnectionsByUserId(userId uuid.UUID) ([]models.SSH, error) {
 	ssh := []models.SSH{}
 
-	// Define query string.
-	query := `SELECT * FROM ssh_connections`
-
-	// Send query to database.
-	err := q.Select(&ssh, query)
+	query := `
+		SELECT id, host, name, password, created_at, user_id
+		FROM ssh_connections
+		where user_id=$1
+	`
+	err := q.Select(&ssh, query, userId)
 	if err != nil {
 		// Return empty object and error.
 		return ssh, err
 	}
 
-	// Return query result.
 	return ssh, nil
 }
 
-func (q *BookQueries) CreateSSHConnection(b *models.SSH) error {
-	// Define query string.
-	query := `INSERT INTO ssh_connections VALUES ($1, $2, $3, $4, $5, $6, $7)`
+func (q *SSHQueries) CreateSSHConnection(b *models.SSH) error {
+	query := `
+		INSERT INTO ssh_connections
+		VALUES ($1, $2, $3, $4, $5, $6, $7)
+	`
 
-	// Send query to database.
-	_, err := q.Exec(query, b.ID, b.CreatedAt, b.UpdatedAt, b.UserID, b.Host, b.PasswordHash, b.Username)
+	_, err := q.Exec(query, b.ID, b.Name, b.Host, b.UserID, b.Password, b.CreatedAt, b.UpdatedAt)
 	if err != nil {
 		// Return only error.
 		return err
 	}
 
-	// This query returns nothing.
 	return nil
 }

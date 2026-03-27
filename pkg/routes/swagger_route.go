@@ -1,16 +1,19 @@
 package routes
 
 import (
+	"github.com/create-go-app/fiber-go-template/docs"
 	"github.com/gofiber/fiber/v2"
-
-	swagger "github.com/gofiber/swagger"
+	"github.com/gofiber/swagger"
 )
 
 // SwaggerRoute func for describe group of API Docs routes.
-func SwaggerRoute(a *fiber.App) {
-	// Create routes group.
-	route := a.Group("/swagger")
+func SwaggerRoute(app *fiber.App) {
 
-	// Routes for GET method:
-	route.Get("*", swagger.HandlerDefault) // get one user by ID
+	app.Get("/swagger/doc.json", func(c *fiber.Ctx) error {
+		return c.SendString(docs.SwaggerInfo.ReadDoc())
+	})
+	app.Get("/swagger/*", swagger.HandlerDefault)
+	app.Get("/debug/doc.json", func(c *fiber.Ctx) error {
+		return c.SendString(docs.SwaggerInfo.ReadDoc())
+	})
 }

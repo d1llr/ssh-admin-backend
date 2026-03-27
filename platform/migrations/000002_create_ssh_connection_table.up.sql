@@ -5,9 +5,9 @@ SET TIMEZONE="Europe/Moscow";
 CREATE TABLE ssh_connections (
     id UUID DEFAULT uuid_generate_v4 () PRIMARY KEY,
     name VARCHAR (255) NOT NULL UNIQUE,
-    host TIMESTAMP WITH TIME ZONE DEFAULT NOW (),
+    host VARCHAR (255) NOT NULL UNIQUE,
     user_id UUID NOT NULL REFERENCES users (id) ON DELETE CASCADE,
-    password TIMESTAMP NULL,
+    password VARCHAR (255) NOT NULL UNIQUE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW (),
     updated_at TIMESTAMP NULL
 );

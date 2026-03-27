@@ -11,6 +11,7 @@ import (
 type Queries struct {
 	*queries.UserQueries // load queries from User model
 	*queries.BookQueries // load queries from Book model
+	*queries.SSHQueries
 }
 
 // OpenDBConnection func for opening database connection.
@@ -40,5 +41,6 @@ func OpenDBConnection() (*Queries, error) {
 		// Set queries from models:
 		UserQueries: &queries.UserQueries{DB: db}, // from User model
 		BookQueries: &queries.BookQueries{DB: db}, // from Book model
+		SSHQueries:  &queries.SSHQueries{DB: db},
 	}, nil
 }
