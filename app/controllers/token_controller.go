@@ -18,6 +18,15 @@ func NewTokenController(services services.Services) *TokenController {
 	return &TokenController{services: services}
 }
 
+// RenewTokens func for renewing tokens.
+// @Description Create a new tokens pair.
+// @Summary create a new tokens pair
+// @Tags Tokens
+// @Accept json
+// @Produce json
+// @Success 200 {object} models.Tokens
+// @Security ApiKeyAuth
+// @Router /v1/token/renew [get]
 func (t *TokenController) RenewTokens(c *fiber.Ctx) error {
 	userId := httpctx.UserID(c)
 

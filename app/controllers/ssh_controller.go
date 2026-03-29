@@ -29,6 +29,14 @@ func (h *SshController) CreateSSH(c *fiber.Ctx) error {
 	return h.services.Ssh.CreateSSHConnection(c)
 }
 
+// GetAllSSHConnections func for getting all ssh connections by user id.
+// @Description Get all ssh connections.
+// @Summary get all ssh connections
+// @Tags SSH
+// @Produce json
+// @Success 200 {object} []models.SSH
+// @Security ApiKeyAuth
+// @Router /v1/ssh/all [post]
 func (h *SshController) GetAllSSHConnections(c *fiber.Ctx) error {
 	return h.services.Ssh.GetAllSSHConnectionsByUserID(c)
 }

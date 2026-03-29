@@ -13,5 +13,5 @@ func PrivateRoutes(a *fiber.App, c controllers.Controllers) {
 	route.Post("/ssh/create", c.Ssh.CreateSSH)
 	route.Get("/ssh/all", c.Ssh.GetAllSSHConnections)
 
-	route.Post("/token/renew", c.Token.RenewTokens)
+	route.Get("/token/renew", c.Token.RenewTokens)
 }

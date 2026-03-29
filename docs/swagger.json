@@ -16,243 +16,28 @@
     },
     "basePath": "/api",
     "paths": {
-        "/v1/book": {
-            "put": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Update book.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Book"
-                ],
-                "summary": "update book",
-                "parameters": [
-                    {
-                        "description": "Book ID",
-                        "name": "id",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "Title",
-                        "name": "title",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "Author",
-                        "name": "author",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "User ID",
-                        "name": "user_id",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "Book status",
-                        "name": "book_status",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "description": "Book attributes",
-                        "name": "book_attrs",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.BookAttrs"
-                        }
-                    }
-                ],
-                "responses": {
-                    "202": {
-                        "description": "ok",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
+        "/v1/ssh/all": {
             "post": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Create a new book.",
-                "consumes": [
-                    "application/json"
-                ],
+                "description": "Get all ssh connections.",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "Book"
+                    "SSH"
                 ],
-                "summary": "create a new book",
-                "parameters": [
-                    {
-                        "description": "Title",
-                        "name": "title",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "Author",
-                        "name": "author",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "User ID",
-                        "name": "user_id",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "Book attributes",
-                        "name": "book_attrs",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.BookAttrs"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.Book"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Delete book by given ID.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Book"
-                ],
-                "summary": "delete book by given ID",
-                "parameters": [
-                    {
-                        "description": "Book ID",
-                        "name": "id",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "ok",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/book/{id}": {
-            "get": {
-                "description": "Get book by given ID.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Book"
-                ],
-                "summary": "get book by given ID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Book ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.Book"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/books": {
-            "get": {
-                "description": "Get all exists books.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Books"
-                ],
-                "summary": "get all exists books",
+                "summary": "get all ssh connections",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.Book"
+                                "$ref": "#/definitions/models.SSH"
                             }
                         }
                     }
@@ -317,13 +102,13 @@
             }
         },
         "/v1/token/renew": {
-            "post": {
+            "get": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Renew access and refresh tokens.",
+                "description": "Create a new tokens pair.",
                 "consumes": [
                     "application/json"
                 ],
@@ -331,25 +116,14 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Token"
+                    "Tokens"
                 ],
-                "summary": "renew access and refresh tokens",
-                "parameters": [
-                    {
-                        "description": "Refresh token",
-                        "name": "refresh_token",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
+                "summary": "create a new tokens pair",
                 "responses": {
                     "200": {
-                        "description": "ok",
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/models.Tokens"
                         }
                     }
                 }
@@ -480,69 +254,14 @@
         }
     },
     "definitions": {
-        "models.Book": {
-            "type": "object",
-            "required": [
-                "author",
-                "book_attrs",
-                "book_status",
-                "id",
-                "title",
-                "user_id"
-            ],
-            "properties": {
-                "author": {
-                    "type": "string",
-                    "maxLength": 255
-                },
-                "book_attrs": {
-                    "$ref": "#/definitions/models.BookAttrs"
-                },
-                "book_status": {
-                    "type": "integer"
-                },
-                "created_at": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string",
-                    "maxLength": 255
-                },
-                "updated_at": {
-                    "type": "string"
-                },
-                "user_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.BookAttrs": {
-            "type": "object",
-            "properties": {
-                "description": {
-                    "type": "string"
-                },
-                "picture": {
-                    "type": "string"
-                },
-                "rating": {
-                    "type": "integer",
-                    "maximum": 10,
-                    "minimum": 1
-                }
-            }
-        },
         "models.SSH": {
             "type": "object",
             "required": [
                 "host",
                 "id",
-                "passwordh",
-                "user_id",
-                "username"
+                "name",
+                "password",
+                "user_id"
             ],
             "properties": {
                 "created_at": {
@@ -555,7 +274,11 @@
                 "id": {
                     "type": "string"
                 },
-                "passwordh": {
+                "name": {
+                    "type": "string",
+                    "maxLength": 255
+                },
+                "password": {
                     "type": "string",
                     "maxLength": 255
                 },
@@ -564,12 +287,11 @@
                 },
                 "user_id": {
                     "type": "string"
-                },
-                "username": {
-                    "type": "string",
-                    "maxLength": 255
                 }
             }
+        },
+        "models.Tokens": {
+            "type": "object"
         },
         "models.User": {
             "type": "object",
