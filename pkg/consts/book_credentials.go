@@ -1,4 +1,4 @@
-package repository
+package consts
 
 const (
 	// BookCreateCredential const for create a new book.

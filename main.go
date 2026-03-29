@@ -3,13 +3,16 @@ package main
 import (
 	"os"
 
+	controllers2 "github.com/create-go-app/fiber-go-template/app/controllers"
+	"github.com/create-go-app/fiber-go-template/app/repositories"
+	"github.com/create-go-app/fiber-go-template/app/services"
+	"github.com/create-go-app/fiber-go-template/app/services/impl"
+	_ "github.com/create-go-app/fiber-go-template/docs" // load API Docs files (Swagger)
 	"github.com/create-go-app/fiber-go-template/pkg/configs"
 	"github.com/create-go-app/fiber-go-template/pkg/middleware"
 	"github.com/create-go-app/fiber-go-template/pkg/routes"
 	"github.com/create-go-app/fiber-go-template/pkg/utils"
 	"github.com/gofiber/fiber/v2"
-
-	_ "github.com/create-go-app/fiber-go-template/docs" // load API Docs files (Swagger)
 
 	_ "github.com/joho/godotenv/autoload" // load .env file automatically
 )
@@ -27,19 +30,24 @@ import (
 // @in header
 // @name Authorization
 func main() {
-	// Define Fiber config.
 	config := configs.FiberConfig()
-
-	// Define a new Fiber app with config.
 	app := fiber.New(config)
 
-	// Middlewares.
+	repositories := repositories.NewRepositories()
+	services := services.Services{
+		Auth:  impl.NewAuthService(repositories),
+		User:  impl.NewUserService(repositories),
+		Ssh:   impl.NewSshService(repositories),
+		Token: impl.NewTokenService(repositories),
+	}
+	controllers := controllers2.NewControllers(services)
+
 	middleware.FiberMiddleware(app) // Register Fiber's middleware for app.
 
 	routes.SwaggerRoute(app)
-	routes.PublicRoutes(app)  // Register a public routes for app.
-	routes.PrivateRoutes(app) // Register a private routes for app.
-	routes.NotFoundRoute(app) // Register route for 404 Error.
+	routes.PublicRoutes(app, controllers)
+	routes.PrivateRoutes(app, controllers)
+	routes.NotFoundRoute(app)
 
 	if os.Getenv("STAGE_STATUS") == "dev" {
 		utils.StartServer(app)

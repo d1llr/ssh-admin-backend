@@ -1,8 +1,9 @@
 package utils
 
 import (
-	"github.com/gofiber/fiber/v2"
 	"time"
+
+	"github.com/gofiber/fiber/v2"
 )
 
 func Check_exp(c *fiber.Ctx, claim TokenMetadata) error {
@@ -14,7 +15,7 @@ func Check_exp(c *fiber.Ctx, claim TokenMetadata) error {
 			c,
 			fiber.StatusUnauthorized,
 			true,
-			"unauthorized, check expiration time of your token",
+			"Expired",
 		)
 	}
 	return nil

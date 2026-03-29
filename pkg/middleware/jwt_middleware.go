@@ -1,24 +1,37 @@
 package middleware
 
 import (
-	"os"
+	"time"
 
+	"github.com/create-go-app/fiber-go-template/pkg/httpctx"
+	"github.com/create-go-app/fiber-go-template/pkg/utils"
 	"github.com/gofiber/fiber/v2"
-
-	jwtMiddleware "github.com/gofiber/contrib/jwt"
 )
 
-// JWTProtected func for specify routes group with JWT authentication.
-// See: https://github.com/gofiber/contrib/jwt
-func JWTProtected() func(*fiber.Ctx) error {
-	// Create config for JWT authentication middleware.
-	config := jwtMiddleware.Config{
-		SigningKey:   jwtMiddleware.SigningKey{Key: []byte(os.Getenv("JWT_SECRET_KEY"))},
-		ContextKey:   "jwt", // used in private routes
-		ErrorHandler: jwtError,
-	}
+func AuthGuard() fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		meta, err := utils.ExtractTokenMetadata(c)
+		if err != nil {
+			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+				"error": true,
+				"msg":   "invalid or missing token",
+			})
+		}
 
-	return jwtMiddleware.New(config)
+		now := time.Now().Unix()
+		if now > meta.Expires {
+			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+				"error": true,
+				"msg":   "token expired",
+			})
+		}
+
+		httpctx.SetUserID(c, meta.UserID)
+		httpctx.SetCredentials(c, meta.Credentials)
+		httpctx.SetTokenMeta(c, meta)
+
+		return c.Next()
+	}
 }
 
 func jwtError(c *fiber.Ctx, err error) error {

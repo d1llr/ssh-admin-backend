@@ -1,4 +1,4 @@
-package repository
+package consts
 
 const (
 	// AdminRoleName const for admin role.

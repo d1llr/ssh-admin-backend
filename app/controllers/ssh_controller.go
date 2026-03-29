@@ -5,6 +5,14 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+type SshController struct {
+	services services.Services
+}
+
+func NewSshController(services services.Services) *SshController {
+	return &SshController{services: services}
+}
+
 // CreateSSH func for creates a new ssh connection.
 // @Description Create a new ssh connection.
 // @Summary create a new ssh connection
@@ -17,10 +25,10 @@ import (
 // @Success 200 {object} models.SSH
 // @Security ApiKeyAuth
 // @Router /v1/ssh/create [post]
-func CreateSSH(c *fiber.Ctx) error {
-	return services.CreateSSHConnection(c)
+func (h *SshController) CreateSSH(c *fiber.Ctx) error {
+	return h.services.Ssh.CreateSSHConnection(c)
 }
 
-func GetAllSSHConnections(c *fiber.Ctx) error {
-	return services.GetAllSSHConnectionsByUserID(c)
+func (h *SshController) GetAllSSHConnections(c *fiber.Ctx) error {
+	return h.services.Ssh.GetAllSSHConnectionsByUserID(c)
 }
